@@ -26,8 +26,8 @@ class MainFrameBase ( wx.Frame ):
 		self.scope = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 640,640 ), wx.TAB_TRAVERSAL )
 		bSizer2.Add( self.scope, 1, wx.EXPAND |wx.ALL, 5 )
 		
-		self.m_button1 = wx.Button( self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer2.Add( self.m_button1, 0, wx.ALL, 5 )
+		self.btn = wx.Button( self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer2.Add( self.btn, 0, wx.ALL, 5 )
 		
 		
 		self.SetSizer( bSizer2 )
