@@ -14,5 +14,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import numpy as np
+import matplotlib
+matplotlib.use("WxAgg")
+from matplotlib.lines import Line2D
+from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
+import matplotlib.pyplot as plt
+
+
 class Oscilloscope:
-    ...
+    def __init__(self, widget):
+        self._widget = widget
+        self._widget.figure = plt.figure()
+        self._widget.canvas = FigureCanvas(self._widget, -1,
+                                           self._widget.figure)
+        self._widget.ax = self._widget.figure.add_subplot(111)
+
+    def close(self):
+        plt.close()
+
+    def plot(self):
+        import random
+        data = [random.random() for i in range(25)]
+        self._widget.ax.hold(False)
+        self._widget.ax.plot(data, '*-')
+        self._widget.canvas.draw()

@@ -14,15 +14,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import numpy as np
-import matplotlib
-matplotlib.use("WxAgg")
-from matplotlib.lines import Line2D
-from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
-import matplotlib.pyplot as plt
 import wx
 
+import client
 import gui.main_frame_base as gui
+import oscilloscope
 
 
 class MainFrame(gui.MainFrameBase):
@@ -32,11 +28,21 @@ class MainFrame(gui.MainFrameBase):
         self._bind_events()
         # Frame auto-size
         self.SetInitialSize()
+        self._connect()
 
     def _init_scope(self):
-        self.scope.figure = plt.figure()
-        self.scope.canvas = FigureCanvas(self, -1, self.scope.figure)
-        self.scope.ax = self.scope.figure.add_subplot(111)
+        self._osc = oscilloscope.Oscilloscope(self.scope)
+
+    def _connect(self):
+        self._client = client.Client('localhost', 2000, self._rcv_handler)
+
+    def _rcv_handler(self, msg):
+        fields = msg.decode().split()
+        if fields[0] == '#':
+            #TODO change header
+            ...
+
+        print(fields)
 
     def _bind_events(self):
         self.Bind(wx.EVT_SHOW, self._on_show)
@@ -47,12 +53,9 @@ class MainFrame(gui.MainFrameBase):
         evt.Skip()
 
     def _on_close(self, evt):
-        plt.close()
+        self._client.close()
+        self._osc.close()
         evt.Skip()
 
     def _plot_frame(self, *_):
-        import random
-        data = [random.random() for i in range(25)]
-        self.scope.ax.hold(False)
-        self.scope.ax.plot(data, '*-')
-        self.scope.canvas.draw()
+        self._osc.plot()
