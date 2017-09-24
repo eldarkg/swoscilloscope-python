@@ -15,27 +15,29 @@
 
 
 import numpy as np
-import matplotlib
-matplotlib.use("WxAgg")
-from matplotlib.lines import Line2D
-from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
-import matplotlib.pyplot as plt
+import threading
+from vispy import app, scene
 
 
 class Oscilloscope:
-    def __init__(self, widget):
-        self._widget = widget
-        self._widget.figure = plt.figure()
-        self._widget.canvas = FigureCanvas(self._widget, -1,
-                                           self._widget.figure)
-        self._widget.ax = self._widget.figure.add_subplot(111)
+    def __init__(self):
+        self._canvas = scene.SceneCanvas(keys='interactive', show=True)
+        grid = self._canvas.central_widget.add_grid()
+        self._view = grid.add_view(row=0, col=0, camera='panzoom')
+        self._view.camera.rect = (-1., -1., 2., 2.)
+        scene.GridLines(color=(1, 1, 1, 0.5), parent=self._view.scene)
+
+        self._vispy_thread = threading.Thread(target=self._vispy_thread_func)
+        self._vispy_thread.start()
+
+    def _vispy_thread_func(self):
+        app.run()
 
     def close(self):
-        plt.close()
+        app.close()
+        self._vispy_thread.join()
 
     def plot(self):
-        import random
-        data = [random.random() for i in range(25)]
-        self._widget.ax.hold(False)
-        self._widget.ax.plot(data, '*-')
-        self._widget.canvas.draw()
+        self._view.camera.rect = (-1., -1., 2., 2.)
+        lines = scene.Line(pos=np.array(((0.,0.),(2.,2.))),
+                           parent=self._view.scene)

@@ -28,10 +28,10 @@ class MainFrame(gui.MainFrameBase):
         self._bind_events()
         # Frame auto-size
         self.SetInitialSize()
-        self._connect()
+        #self._connect()
 
     def _init_scope(self):
-        self._osc = oscilloscope.Oscilloscope(self.scope)
+        self._osc = oscilloscope.Oscilloscope()
 
     def _connect(self):
         self._client = client.Client('localhost', 2000, self._rcv_handler)
