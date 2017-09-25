@@ -15,29 +15,21 @@
 
 
 import numpy as np
-import threading
 from vispy import app, scene
 
 
 class Oscilloscope:
-    def __init__(self):
-        self._canvas = scene.SceneCanvas(keys='interactive', show=True)
+    def __init__(self, widget):
+        self._canvas = scene.SceneCanvas(position=(0, 0), show=True,
+                                         keys='interactive', parent=widget)
         grid = self._canvas.central_widget.add_grid()
         self._view = grid.add_view(row=0, col=0, camera='panzoom')
         self._view.camera.rect = (-1., -1., 2., 2.)
         scene.GridLines(color=(1, 1, 1, 0.5), parent=self._view.scene)
 
-        self._vispy_thread = threading.Thread(target=self._vispy_thread_func)
-        self._vispy_thread.start()
-
-    def _vispy_thread_func(self):
-        app.run()
-
     def close(self):
         app.close()
-        self._vispy_thread.join()
 
     def plot(self):
-        self._view.camera.rect = (-1., -1., 2., 2.)
         lines = scene.Line(pos=np.array(((0.,0.),(2.,2.))),
                            parent=self._view.scene)

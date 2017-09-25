@@ -24,14 +24,10 @@ import oscilloscope
 class MainFrame(gui.MainFrameBase):
     def __init__(self):
         gui.MainFrameBase.__init__(self, None)
-        self._init_scope()
         self._bind_events()
         # Frame auto-size
         self.SetInitialSize()
         #self._connect()
-
-    def _init_scope(self):
-        self._osc = oscilloscope.Oscilloscope()
 
     def _connect(self):
         self._client = client.Client('localhost', 2000, self._rcv_handler)
@@ -50,6 +46,7 @@ class MainFrame(gui.MainFrameBase):
         self.Bind(wx.EVT_BUTTON, self._plot_frame)
 
     def _on_show(self, evt):
+        self._osc = oscilloscope.Oscilloscope(self.scope)
         evt.Skip()
 
     def _on_close(self, evt):
