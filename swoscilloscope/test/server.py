@@ -21,6 +21,7 @@ import time
 
 
 SERVER_PORT = 2000
+PERIOD = 0.5
 
 
 def close():
@@ -36,8 +37,12 @@ server.listen(1)
 
 while True:
     client, addr = server.accept()
+    t = 0.0
     print('Connected ', addr)
 
+    client.sendall(b'# sig0 sig1\n')
     while True:
-        client.sendall(b'0.1 0.3 0.4')
-        time.sleep(0.5)
+        b = bytes('{0} 0.1 0.2\n'.format(t), encoding='ascii')
+        client.sendall(b)
+        time.sleep(PERIOD)
+        t += PERIOD

@@ -39,8 +39,6 @@ class Client(asyncore.dispatcher):
         pass
 
     def handle_close(self):
-        if self._thread:
-            self._thread.join()
         self.close()
 
     def handle_read(self):

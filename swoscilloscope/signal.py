@@ -14,23 +14,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from vispy import app, scene
-
-from signal import *
+import numpy as np
 
 
-class Oscilloscope:
-    def __init__(self, widget):
-        self._canvas = scene.SceneCanvas(show=True, keys='interactive',
-                                         parent=widget)
-        grid = self._canvas.central_widget.add_grid()
-        self._view = grid.add_view(row=0, col=0, camera='panzoom')
-        self._view.camera.rect = (-1., -1., 2., 2.)
-        scene.GridLines(color=(1, 1, 1, 0.5), parent=self._view.scene)
+_nsamples = 32
 
-    def close(self):
-        ...
 
-    def plot(self, signals):
-        for sig in signals:
-            scene.Line(pos=sig.get_samples(), parent=self._view.scene)
+def set_nsamples(n):
+    _nsamples = n
+
+def get_nsamples(n):
+    return _nsamples
+
+
+class Signal:
+    def __init__(self):
+        self._samples = np.zeros((0, 2), dtype=np.float64)
+
+    def get_samples(self):
+        return self._samples
+
+    def append(self, samples):
+        #TODO time -= (first sample time)
+        self._samples = np.append(self._samples, samples, axis=0)
+        #TODO check nsamples strict

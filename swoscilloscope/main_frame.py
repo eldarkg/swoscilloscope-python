@@ -18,7 +18,8 @@ import wx
 
 import client
 import gui.main_frame_base as gui
-import oscilloscope
+from oscilloscope import *
+from signal import *
 
 
 class MainFrame(gui.MainFrameBase):
@@ -27,18 +28,29 @@ class MainFrame(gui.MainFrameBase):
         self._bind_events()
         # Frame auto-size
         self.SetInitialSize()
-        #self._connect()
+        self._connect()
+        self._signals = []
 
     def _connect(self):
         self._client = client.Client('localhost', 2000, self._rcv_handler)
 
     def _rcv_handler(self, msg):
-        fields = msg.decode().split()
-        if fields[0] == '#':
-            #TODO change header
-            ...
+        entries = msg.decode().split(sep='\n')
+        for entry in entries:
+            if entry == '':
+                break
 
-        print(fields)
+            fields = entry.split()
+            if fields[0] == '#':
+                self._signals = []
+                for fname in fields[1:]:
+                    #TODO change header
+                    self._signals.append(Signal())
+            else:
+                t = float(fields[0])
+                for i in range(len(fields) - 1):
+                    print(fields[i+1])
+                    self._signals[i].append([(t, float(fields[i+1]))])
 
     def _bind_events(self):
         self.Bind(wx.EVT_SHOW, self._on_show)
@@ -46,7 +58,7 @@ class MainFrame(gui.MainFrameBase):
         self.Bind(wx.EVT_BUTTON, self._plot_frame)
 
     def _on_show(self, evt):
-        self._osc = oscilloscope.Oscilloscope(self.scope)
+        self._osc = Oscilloscope(self.scope)
         evt.Skip()
 
     def _on_close(self, evt):
@@ -55,4 +67,4 @@ class MainFrame(gui.MainFrameBase):
         evt.Skip()
 
     def _plot_frame(self, *_):
-        self._osc.plot()
+        self._osc.plot(self._signals)
