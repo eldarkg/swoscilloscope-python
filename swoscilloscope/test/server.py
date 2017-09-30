@@ -16,6 +16,7 @@
 
 
 import atexit
+import numpy as np
 import socket
 import time
 
@@ -42,7 +43,9 @@ while True:
 
     client.sendall(b'# sig0 sig1\n')
     while True:
-        b = bytes('{0} 0.1 0.2\n'.format(t), encoding='ascii')
+        s0 = (np.random.random_sample() - 0.5) * 2.0
+        s1 = (np.random.random_sample() - 0.5) * 2.0
+        b = bytes('{0} {1} {2}\n'.format(PERIOD, s0, s1), encoding='ascii')
         client.sendall(b)
         time.sleep(PERIOD)
         t += PERIOD
