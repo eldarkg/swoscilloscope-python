@@ -18,18 +18,22 @@ import wx
 
 import client
 import gui.main_frame_base as gui
-from oscilloscope import *
 from signal import *
+from oscilloscope import Oscilloscope
+
+
+_PLOT_PERIOD = 0.03
 
 
 class MainFrame(gui.MainFrameBase):
     def __init__(self):
         gui.MainFrameBase.__init__(self, None)
+        self._signals = []
+        self._plot_frame_tmr = wx.Timer(self)
         self._bind_events()
         # Frame auto-size
         self.SetInitialSize()
         self._connect()
-        self._signals = []
 
     def _connect(self):
         self._client = client.Client('localhost', 2000, self._rcv_handler)
@@ -49,19 +53,20 @@ class MainFrame(gui.MainFrameBase):
             else:
                 t = float(fields[0])
                 for i in range(len(fields) - 1):
-                    print(fields[i+1])
                     self._signals[i].append([(t, float(fields[i+1]))])
 
     def _bind_events(self):
         self.Bind(wx.EVT_SHOW, self._on_show)
         self.Bind(wx.EVT_CLOSE, self._on_close)
-        self.Bind(wx.EVT_BUTTON, self._plot_frame)
+        self.Bind(wx.EVT_TIMER, self._plot_frame, self._plot_frame_tmr)
 
     def _on_show(self, evt):
         self._osc = Oscilloscope(self.scope)
+        self._plot_frame_tmr.Start(_PLOT_PERIOD * 1000) # to ms
         evt.Skip()
 
     def _on_close(self, evt):
+        self._plot_frame_tmr.Stop()
         self._client.close()
         self._osc.close()
         evt.Skip()

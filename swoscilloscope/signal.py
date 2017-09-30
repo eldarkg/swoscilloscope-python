@@ -15,6 +15,7 @@
 
 
 import numpy as np
+from vispy import app, scene
 
 
 _nsamples = 32
@@ -30,6 +31,7 @@ def get_nsamples(n):
 class Signal:
     def __init__(self):
         self._samples = np.zeros((0, 2), dtype=np.float64)
+        self._vline = scene.Line()
 
     def get_samples(self):
         return self._samples
@@ -38,3 +40,7 @@ class Signal:
         #TODO time -= (first sample time)
         self._samples = np.append(self._samples, samples, axis=0)
         #TODO check nsamples strict
+
+    def plot(self, scene):
+        self._vline.parent = scene
+        self._vline.set_data(pos=self._samples)

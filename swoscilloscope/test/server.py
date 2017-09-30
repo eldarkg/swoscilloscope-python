@@ -21,7 +21,7 @@ import time
 
 
 SERVER_PORT = 2000
-PERIOD = 0.5
+PERIOD = 0.005
 
 
 def close():

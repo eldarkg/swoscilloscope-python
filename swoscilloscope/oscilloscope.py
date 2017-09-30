@@ -16,8 +16,6 @@
 
 from vispy import app, scene
 
-from signal import *
-
 
 class Oscilloscope:
     def __init__(self, widget):
@@ -33,4 +31,4 @@ class Oscilloscope:
 
     def plot(self, signals):
         for sig in signals:
-            scene.Line(pos=sig.get_samples(), parent=self._view.scene)
+            sig.plot(self._view.scene)
