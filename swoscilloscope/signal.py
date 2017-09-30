@@ -18,7 +18,7 @@ import numpy as np
 from vispy import app, scene
 
 
-_nsamples = 32
+_nsamples = 128
 
 
 def set_nsamples(n):
@@ -36,10 +36,22 @@ class Signal:
     def get_samples(self):
         return self._samples
 
-    def append(self, samples):
-        #TODO time -= (first sample time)
-        self._samples = np.append(self._samples, samples, axis=0)
-        #TODO check nsamples strict
+    def append(self, sample):
+        def offset_time(a, base):
+            return (a[0] - base, a[1])
+
+        if self._samples.size != 0:
+            sample[0] = (self._samples[-1][0] + sample[0][0], sample[0][1])
+        else:
+            sample[0] = (0.0, sample[0][1])
+
+        self._samples = np.append(self._samples, sample, axis=0)
+
+        if self._samples.shape[0] > _nsamples:
+            self._samples = self._samples[1:]
+            base = self._samples[0][0]
+            self._samples = np.apply_along_axis(offset_time, 1, self._samples,
+                                                base)
 
     def plot(self, scene):
         self._vline.parent = scene

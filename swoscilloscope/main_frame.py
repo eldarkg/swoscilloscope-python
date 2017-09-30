@@ -51,9 +51,9 @@ class MainFrame(gui.MainFrameBase):
                     #TODO change header
                     self._signals.append(Signal())
             else:
-                t = float(fields[0])
+                dt = float(fields[0])
                 for i in range(len(fields) - 1):
-                    self._signals[i].append([(t, float(fields[i+1]))])
+                    self._signals[i].append([(dt, float(fields[i+1]))])
 
     def _bind_events(self):
         self.Bind(wx.EVT_SHOW, self._on_show)
