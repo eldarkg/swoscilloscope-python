@@ -30,6 +30,7 @@ _PLOT_SAMPLES_PER_DIV = 10
 class MainFrame(gui.MainFrameBase):
     def __init__(self):
         gui.MainFrameBase.__init__(self, None)
+        self._cur_signal = 0
         self._signals = []
         self._osc = None
         self._t = 0.
@@ -54,8 +55,10 @@ class MainFrame(gui.MainFrameBase):
             if fields[0] == '#':
                 self._signals = []
                 for fname in fields[1:]:
+                    self.signal_list.Append(fname)
                     #TODO change header
                     self._signals.append(Signal())
+                    self._signals[-1].disable()
             else:
                 dt = float(fields[0])
                 self._t += dt
@@ -74,6 +77,7 @@ class MainFrame(gui.MainFrameBase):
         self.time_div_unit.Bind(wx.EVT_CHOICE, self._on_change_time_div)
         self.setup_mul_op.Bind(wx.EVT_CHOICE, self._on_change_setup_mul)
         self.setup_mul_val.Bind(wx.EVT_CHOICE, self._on_change_setup_mul)
+        self.signal_list.Bind(wx.EVT_CHOICE, self._on_change_signal_list)
 
     def _on_show(self, evt):
         self._osc = Oscilloscope(self.scope)
@@ -103,6 +107,13 @@ class MainFrame(gui.MainFrameBase):
 
         self._vert_scale = val
         self._reset_frame()
+
+    def _on_change_signal_list(self, evt):
+        self._cur_signal = self.signal_list.GetSelection()
+        for sig in self._signals:
+            sig.disable()
+        self._signals[self._cur_signal].enable()
+        self._osc.reset(self._signals)
 
     def _reset_frame(self):
         if self._osc != None:

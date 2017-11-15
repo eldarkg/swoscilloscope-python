@@ -31,6 +31,7 @@ def get_nsamples(n):
 class Signal:
     def __init__(self):
         self.reset()
+        self.isenable = False
         self._vline = scene.Line()
 
     def get_samples(self):
@@ -57,6 +58,15 @@ class Signal:
     def reset(self):
         self._samples = np.zeros((0, 2), dtype=np.float64)
 
-    def plot(self, scene):
-        self._vline.parent = scene
+    def enable(self):
+        self.isenable = True
+
+    def disable(self):
+        self.isenable = False
+        self.reset()
         self._vline.set_data(pos=self._samples)
+
+    def plot(self, scene):
+        if self.isenable:
+            self._vline.parent = scene
+            self._vline.set_data(pos=self._samples)

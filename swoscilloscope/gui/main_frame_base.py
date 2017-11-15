@@ -32,10 +32,10 @@ class MainFrameBase ( wx.Frame ):
 		self.m_staticText1.Wrap( -1 )
 		bSizer21.Add( self.m_staticText1, 0, wx.ALL, 5 )
 		
-		signals_listChoices = []
-		self.signals_list = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, signals_listChoices, 0 )
-		self.signals_list.SetSelection( 0 )
-		bSizer21.Add( self.signals_list, 0, wx.ALL|wx.EXPAND, 5 )
+		signal_listChoices = []
+		self.signal_list = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, signal_listChoices, 0 )
+		self.signal_list.SetSelection( 0 )
+		bSizer21.Add( self.signal_list, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 		
