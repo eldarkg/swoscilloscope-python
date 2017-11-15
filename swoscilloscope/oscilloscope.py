@@ -19,11 +19,12 @@ from vispy import app, scene
 
 class Oscilloscope:
     def __init__(self, widget):
-        self._canvas = scene.SceneCanvas(show=True, keys='interactive',
-                                         parent=widget)
+        self._canvas = scene.SceneCanvas(show=True,
+                                         size=widget.GetSize(),
+                                         keys='interactive', parent=widget)
         grid = self._canvas.central_widget.add_grid()
         self._view = grid.add_view(row=0, col=0, camera='panzoom')
-        self._view.camera.rect = (-1., -1., 2., 2.)
+        self._view.camera.rect = (0., -0.5, 1., 1.)
         scene.GridLines(color=(1, 1, 1, 0.5), parent=self._view.scene)
 
     def close(self):
