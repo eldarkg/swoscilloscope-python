@@ -18,7 +18,7 @@ import numpy as np
 from vispy import app, scene
 
 
-_nsamples = 128
+_nsamples = 101
 
 
 def set_nsamples(n):
@@ -47,6 +47,7 @@ class Signal:
 
         self._samples = np.append(self._samples, sample, axis=0)
 
+        #TODO time control > 1.0
         if self._samples.shape[0] > _nsamples:
             self._samples = self._samples[1:]
             base = self._samples[0][0]

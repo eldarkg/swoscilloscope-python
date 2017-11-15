@@ -23,12 +23,16 @@ from oscilloscope import Oscilloscope
 
 
 _PLOT_PERIOD = 0.03
+_PLOT_N_DIV = 10
+_PLOT_SAMPLES_PER_DIV = 10
 
 
 class MainFrame(gui.MainFrameBase):
     def __init__(self):
         gui.MainFrameBase.__init__(self, None)
         self._signals = []
+        self._t = 0.
+        self._on_change_time_div(None)
         self._plot_frame_tmr = wx.Timer(self)
         self._bind_events()
         # Frame auto-size
@@ -52,13 +56,19 @@ class MainFrame(gui.MainFrameBase):
                     self._signals.append(Signal())
             else:
                 dt = float(fields[0])
-                for i in range(len(fields) - 1):
-                    self._signals[i].append([(dt, float(fields[i+1]))])
+                self._t += dt
+                if self._t >= self._sample_time:
+                    step = self._t * self._scale_per_sec
+                    self._t = 0.
+                    for i in range(len(fields) - 1):
+                        self._signals[i].append([(step, float(fields[i+1]))])
 
     def _bind_events(self):
         self.Bind(wx.EVT_SHOW, self._on_show)
         self.Bind(wx.EVT_CLOSE, self._on_close)
         self.Bind(wx.EVT_TIMER, self._plot_frame, self._plot_frame_tmr)
+        self.time_div_val.Bind(wx.EVT_CHOICE, self._on_change_time_div)
+        self.time_div_unit.Bind(wx.EVT_CHOICE, self._on_change_time_div)
 
     def _on_show(self, evt):
         self._osc = Oscilloscope(self.scope)
@@ -71,5 +81,26 @@ class MainFrame(gui.MainFrameBase):
         self._osc.close()
         evt.Skip()
 
+    def _on_change_time_div(self, evt):
+        val = int(self._get_choice(self.time_div_val))
+        mul = self._unit_to_mul(self._get_choice(self.time_div_unit))
+        self._sec_per_div = val * mul
+
+        self._sample_time = self._sec_per_div / _PLOT_SAMPLES_PER_DIV
+        self._scale_per_sec = 1. / (_PLOT_N_DIV * self._sec_per_div)
+
     def _plot_frame(self, *_):
         self._osc.plot(self._signals)
+
+    def _get_choice(self, choice):
+        return choice.GetString(choice.GetSelection())
+
+    def _unit_to_mul(self, unit):
+        if unit == "ns":
+            return 1.E-9
+        elif unit == "us":
+            return 1.E-6
+        elif unit == "ms":
+            return 1.E-3
+        elif unit == "s":
+            return 1.

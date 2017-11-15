@@ -25,7 +25,7 @@ class Oscilloscope:
         grid = self._canvas.central_widget.add_grid()
         self._view = grid.add_view(row=0, col=0, camera='panzoom')
         self._view.camera.rect = (0., -0.5, 1., 1.)
-        scene.GridLines(color=(1, 1, 1, 0.5), parent=self._view.scene)
+        scene.GridLines(color=(1, 1, 1, 1), parent=self._view.scene)
 
     def close(self):
         ...
