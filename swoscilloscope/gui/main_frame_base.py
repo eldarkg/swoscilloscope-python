@@ -61,10 +61,24 @@ class MainFrameBase ( wx.Frame ):
 		self.setup_enable = wx.CheckBox( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Enable", wx.DefaultPosition, wx.DefaultSize, 0 )
 		sbSizer1.Add( self.setup_enable, 0, wx.ALL, 5 )
 		
-		bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
+		bSizer41 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.m_staticText21 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Vertical", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText21.Wrap( -1 )
+		bSizer41.Add( self.m_staticText21, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		
+		setup_mul_opChoices = [ u"mul", u"div" ]
+		self.setup_mul_op = wx.Choice( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, setup_mul_opChoices, 0 )
+		self.setup_mul_op.SetSelection( 1 )
+		bSizer41.Add( self.setup_mul_op, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		
+		setup_mul_valChoices = [ u"1", u"2", u"5", u"10", u"20", u"50", u"100", u"200", u"500", u"1000", u"2000", u"5000" ]
+		self.setup_mul_val = wx.Choice( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, setup_mul_valChoices, 0 )
+		self.setup_mul_val.SetSelection( 3 )
+		bSizer41.Add( self.setup_mul_val, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		
-		sbSizer1.Add( bSizer3, 1, wx.EXPAND, 5 )
+		sbSizer1.Add( bSizer41, 0, wx.EXPAND, 5 )
 		
 		
 		bSizer21.Add( sbSizer1, 1, wx.EXPAND, 5 )
