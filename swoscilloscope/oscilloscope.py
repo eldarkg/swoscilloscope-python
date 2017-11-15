@@ -30,6 +30,10 @@ class Oscilloscope:
     def close(self):
         ...
 
+    def reset(self, signals):
+        for sig in signals:
+            sig.reset()
+
     def plot(self, signals):
         for sig in signals:
             sig.plot(self._view.scene)

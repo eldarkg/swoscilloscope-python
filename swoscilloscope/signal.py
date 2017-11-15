@@ -30,7 +30,7 @@ def get_nsamples(n):
 
 class Signal:
     def __init__(self):
-        self._samples = np.zeros((0, 2), dtype=np.float64)
+        self.reset()
         self._vline = scene.Line()
 
     def get_samples(self):
@@ -53,6 +53,9 @@ class Signal:
             base = self._samples[0][0]
             self._samples = np.apply_along_axis(offset_time, 1, self._samples,
                                                 base)
+
+    def reset(self):
+        self._samples = np.zeros((0, 2), dtype=np.float64)
 
     def plot(self, scene):
         self._vline.parent = scene

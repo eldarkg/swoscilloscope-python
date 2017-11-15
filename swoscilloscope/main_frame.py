@@ -31,6 +31,7 @@ class MainFrame(gui.MainFrameBase):
     def __init__(self):
         gui.MainFrameBase.__init__(self, None)
         self._signals = []
+        self._osc = None
         self._t = 0.
         self._on_change_time_div(None)
         self._on_change_setup_mul(None)
@@ -92,6 +93,7 @@ class MainFrame(gui.MainFrameBase):
 
         self._sample_time = self._sec_per_div / _PLOT_SAMPLES_PER_DIV
         self._scale_per_sec = 1. / (_PLOT_N_DIV * self._sec_per_div)
+        self._reset_frame()
 
     def _on_change_setup_mul(self, evt):
         isdiv = (self._get_choice(self.setup_mul_op) == "div")
@@ -100,9 +102,15 @@ class MainFrame(gui.MainFrameBase):
             val = 1. / val
 
         self._vert_scale = val
+        self._reset_frame()
+
+    def _reset_frame(self):
+        if self._osc != None:
+            self._osc.reset(self._signals)
 
     def _plot_frame(self, *_):
-        self._osc.plot(self._signals)
+        if self._osc != None:
+            self._osc.plot(self._signals)
 
     def _get_choice(self, choice):
         return choice.GetString(choice.GetSelection())
