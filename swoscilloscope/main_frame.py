@@ -34,9 +34,10 @@ class MainFrame(gui.MainFrameBase):
         self._signals = []
         self._osc = None
         self._t = 0.
-        self._on_change_time_div(None)
-        self._on_change_setup_mul(None)
         self._plot_frame_tmr = wx.Timer(self)
+        self._on_change_time_div()
+        self._on_change_setup_mul()
+        self._on_toogle_run()
         self._bind_events()
         # Frame auto-size
         self.SetInitialSize()
@@ -78,10 +79,10 @@ class MainFrame(gui.MainFrameBase):
         self.setup_mul_op.Bind(wx.EVT_CHOICE, self._on_change_setup_mul)
         self.setup_mul_val.Bind(wx.EVT_CHOICE, self._on_change_setup_mul)
         self.signal_list.Bind(wx.EVT_CHOICE, self._on_change_signal_list)
+        self.run_btn.Bind(wx.EVT_TOGGLEBUTTON, self._on_toogle_run)
 
     def _on_show(self, evt):
         self._osc = Oscilloscope(self.scope)
-        self._plot_frame_tmr.Start(_PLOT_PERIOD * 1000) # to ms
         evt.Skip()
 
     def _on_close(self, evt):
@@ -90,7 +91,7 @@ class MainFrame(gui.MainFrameBase):
         self._osc.close()
         evt.Skip()
 
-    def _on_change_time_div(self, evt):
+    def _on_change_time_div(self, *_):
         val = int(self._get_choice(self.time_div_val))
         mul = self._unit_to_mul(self._get_choice(self.time_div_unit))
         self._sec_per_div = val * mul
@@ -99,7 +100,7 @@ class MainFrame(gui.MainFrameBase):
         self._scale_per_sec = 1. / (_PLOT_N_DIV * self._sec_per_div)
         self._reset_frame()
 
-    def _on_change_setup_mul(self, evt):
+    def _on_change_setup_mul(self, *_):
         isdiv = (self._get_choice(self.setup_mul_op) == "div")
         val = int(self._get_choice(self.setup_mul_val))
         if isdiv:
@@ -108,12 +109,22 @@ class MainFrame(gui.MainFrameBase):
         self._vert_scale = val
         self._reset_frame()
 
-    def _on_change_signal_list(self, evt):
+    def _on_change_signal_list(self, *_):
         self._cur_signal = self.signal_list.GetSelection()
         for sig in self._signals:
             sig.disable()
         self._signals[self._cur_signal].enable()
         self._osc.reset(self._signals)
+
+    def _on_toogle_run(self, *_):
+        if self.run_btn.GetValue():
+            self._plot_frame_tmr.Start(_PLOT_PERIOD * 1000) # to ms
+            self.run_btn.SetBackgroundColour(wx.Colour(0, 169, 0))
+            self.run_btn.SetLabel("Run")
+        else:
+            self._plot_frame_tmr.Stop()
+            self.run_btn.SetLabel("Stop")
+            self.run_btn.SetBackgroundColour(wx.Colour(255, 0, 0))
 
     def _reset_frame(self):
         if self._osc != None:

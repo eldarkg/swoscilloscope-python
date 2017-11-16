@@ -56,6 +56,12 @@ class MainFrameBase ( wx.Frame ):
 		
 		bSizer21.Add( bSizer4, 0, wx.EXPAND, 5 )
 		
+		self.run_btn = wx.ToggleButton( self, wx.ID_ANY, u"*", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.run_btn.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+		self.run_btn.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+		
+		bSizer21.Add( self.run_btn, 0, wx.ALL|wx.EXPAND, 5 )
+		
 		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Setup" ), wx.VERTICAL )
 		
 		self.setup_enable = wx.CheckBox( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Enable", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -84,7 +90,7 @@ class MainFrameBase ( wx.Frame ):
 		bSizer21.Add( sbSizer1, 1, wx.EXPAND, 5 )
 		
 		
-		bSizer2.Add( bSizer21, 1, wx.EXPAND, 5 )
+		bSizer2.Add( bSizer21, 0, wx.EXPAND, 5 )
 		
 		
 		self.SetSizer( bSizer2 )
