@@ -23,8 +23,9 @@ from oscilloscope import Oscilloscope
 
 
 _PLOT_PERIOD = 0.03
-_PLOT_N_DIV = 10
-_PLOT_SAMPLES_PER_DIV = 10
+_PLOT_N_DIV_X = 12
+_PLOT_N_DIV_Y = 8
+_PLOT_SAMPLES_PER_DIV = 20
 
 
 class MainFrame(gui.MainFrameBase):
@@ -36,7 +37,7 @@ class MainFrame(gui.MainFrameBase):
         self._t = 0.
         self._plot_frame_tmr = wx.Timer(self)
         self._on_change_time_div()
-        self._on_change_setup_mul()
+        self._on_change_setup_vert_div()
         self._on_toogle_run()
         self._bind_events()
         # Frame auto-size
@@ -76,13 +77,15 @@ class MainFrame(gui.MainFrameBase):
         self.Bind(wx.EVT_TIMER, self._plot_frame, self._plot_frame_tmr)
         self.time_div_val.Bind(wx.EVT_CHOICE, self._on_change_time_div)
         self.time_div_unit.Bind(wx.EVT_CHOICE, self._on_change_time_div)
-        self.setup_mul_op.Bind(wx.EVT_CHOICE, self._on_change_setup_mul)
-        self.setup_mul_val.Bind(wx.EVT_CHOICE, self._on_change_setup_mul)
+        self.setup_vert_div_val.Bind(wx.EVT_CHOICE,
+                                     self._on_change_setup_vert_div)
+        self.setup_vert_div_unit.Bind(wx.EVT_CHOICE,
+                                      self._on_change_setup_vert_div)
         self.signal_list.Bind(wx.EVT_CHOICE, self._on_change_signal_list)
         self.run_btn.Bind(wx.EVT_TOGGLEBUTTON, self._on_toogle_run)
 
     def _on_show(self, evt):
-        self._osc = Oscilloscope(self.scope)
+        self._osc = Oscilloscope(_PLOT_N_DIV_X, _PLOT_N_DIV_Y, self.scope)
         evt.Skip()
 
     def _on_close(self, evt):
@@ -97,16 +100,15 @@ class MainFrame(gui.MainFrameBase):
         self._sec_per_div = val * mul
 
         self._sample_time = self._sec_per_div / _PLOT_SAMPLES_PER_DIV
-        self._scale_per_sec = 1. / (_PLOT_N_DIV * self._sec_per_div)
+        self._scale_per_sec = 1. / (_PLOT_N_DIV_Y * self._sec_per_div)
         self._reset_frame()
 
-    def _on_change_setup_mul(self, *_):
-        isdiv = (self._get_choice(self.setup_mul_op) == "div")
-        val = int(self._get_choice(self.setup_mul_val))
-        if isdiv:
-            val = 1. / val
+    def _on_change_setup_vert_div(self, *_):
+        val = int(self._get_choice(self.setup_vert_div_val))
+        mul = self._vert_unit_to_mul(self._get_choice(self.setup_vert_div_unit))
+        self._val_per_div = val * mul
 
-        self._vert_scale = val
+        self._vert_scale = 1. / (self._val_per_div * _PLOT_N_DIV_Y)
         self._reset_frame()
 
     def _on_change_signal_list(self, *_):
@@ -145,4 +147,16 @@ class MainFrame(gui.MainFrameBase):
         elif unit == "ms":
             return 1.E-3
         elif unit == "s":
+            return 1.
+
+    def _vert_unit_to_mul(self, unit):
+        if unit == "u":
+            return 1.E-6
+        elif unit == "m":
+            return 1.E-3
+        elif unit == "k":
+            return 1.E3
+        elif unit == "M":
+            return 1.E6
+        elif unit == "-":
             return 1.

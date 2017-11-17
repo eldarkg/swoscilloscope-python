@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">MainFrameBase</property>
             <property name="pos"></property>
-            <property name="size">853,620</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
             <property name="title"></property>
@@ -95,7 +95,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxPanel" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -141,7 +141,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
-                        <property name="size">640,640</property>
+                        <property name="size">720,480</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
@@ -852,7 +852,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Vertical</property>
+                                                <property name="label">Vertical div</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -921,7 +921,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;mul&quot; &quot;div&quot;</property>
+                                                <property name="choices">&quot;1&quot; &quot;2&quot; &quot;5&quot; &quot;10&quot; &quot;20&quot; &quot;50&quot; &quot;100&quot; &quot;200&quot; &quot;500&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -943,7 +943,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">setup_mul_op</property>
+                                                <property name="name">setup_vert_div_val</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -951,7 +951,7 @@
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="selection">1</property>
+                                                <property name="selection">0</property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1009,7 +1009,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;1&quot; &quot;2&quot; &quot;5&quot; &quot;10&quot; &quot;20&quot; &quot;50&quot; &quot;100&quot; &quot;200&quot; &quot;500&quot; &quot;1000&quot; &quot;2000&quot; &quot;5000&quot;</property>
+                                                <property name="choices">&quot;u&quot; &quot;m&quot; &quot;-&quot; &quot;k&quot; &quot;M&quot; &quot;&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -1031,7 +1031,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">setup_mul_val</property>
+                                                <property name="name">setup_vert_div_unit</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -1039,7 +1039,7 @@
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="selection">3</property>
+                                                <property name="selection">2</property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
