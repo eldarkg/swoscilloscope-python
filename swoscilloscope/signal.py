@@ -18,7 +18,7 @@ import numpy as np
 from vispy import app, scene
 
 
-_nsamples = 240
+_nsamples = 220
 
 
 def set_nsamples(n):

@@ -68,8 +68,10 @@ class MainFrame(gui.MainFrameBase):
                     step = self._t * self._scale_per_sec
                     self._t = 0.
                     for i in range(len(fields) - 1):
-                        self._signals[i].append([(step,
-                            float(fields[i+1]) * self._vert_scale)])
+                        if self._signals[i].isenable:
+                            self._signals[i].append([(step,
+                                float(fields[i+1]) * self._vert_scale)])
+                            break
 
     def _bind_events(self):
         self.Bind(wx.EVT_SHOW, self._on_show)
