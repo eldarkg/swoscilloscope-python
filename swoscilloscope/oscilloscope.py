@@ -32,7 +32,10 @@ class Oscilloscope:
         for p in np.linspace(0., ratio, num=5*nx+1):
             scene.InfiniteLine(pos=p, color=(0.3, 0.3, 0.3, 1.), vertical=True, parent=self._view.scene)
         for p in np.linspace(-0.5, 0.5, num=5*ny+1):
-            scene.InfiniteLine(pos=p, color=(0.3, 0.3, 0.3, 1.), vertical=False, parent=self._view.scene)
+            if p == 0.:
+                scene.InfiniteLine(pos=p, color=(0.5, 0.5, 0.5, 1.), vertical=False, parent=self._view.scene)
+            else:
+                scene.InfiniteLine(pos=p, color=(0.3, 0.3, 0.3, 1.), vertical=False, parent=self._view.scene)
 
         c_x = np.linspace(0., ratio, num=nx+1)
         c_y = np.linspace(-0.5, 0.5, num=ny+1)
@@ -40,7 +43,7 @@ class Oscilloscope:
         grid = grid.reshape((nx+1)*(ny+1), 2)
         scene.Markers(pos=grid, symbol='square', size=4, face_color=(0.6, 0.6, 0.6, 1.), parent=self._view.scene)
 
-        scene.Line(pos=np.array([[0., 0.], [ratio, 0.]]), color=(0.5, 0.5, 0.5, 1.), width=1, parent=self._view.scene)
+        #scene.Line(pos=np.array([[0., 0.], [ratio, 0.]]), color=(0.5, 0.5, 0.5, 1.), width=1, parent=self._view.scene)
         #scene.Line(pos=np.array([[0.75, -0.5], [0.75, 0.5]]), color=(0.5, 0.5, 0.5, 1.), width=1, parent=self._view.scene)
 
         #scene.GridLines(scale=(1.25, 1.25), color=(0.5, 0.5, 0.5, 1.), parent=self._view.scene)

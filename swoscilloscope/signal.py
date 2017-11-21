@@ -69,4 +69,4 @@ class Signal:
     def plot(self, scene):
         if self.isenable:
             self._vline.parent = scene
-            self._vline.set_data(pos=self._samples)
+            self._vline.set_data(pos=self._samples, color=(0., 0.8, 0.8, 1.))
